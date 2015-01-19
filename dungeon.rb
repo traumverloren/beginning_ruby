@@ -61,22 +61,31 @@ end
 
 # Start game, get player_name
 puts "Please enter your name to start the game!"
-player_name = gets.chomp
+player_name = gets.chomp.to_s
+while player_name.length == 0
+  puts "Sorry, try again.  Please enter your name to start the game!"
+  player_name = gets.chomp.to_s
+end
 my_dungeon = Dungeon.new(player_name)
 
+
 # Add rooms to the dungeon
-my_dungeon.add_room(:largecave, "Large Cave", "a large cavernous cave", { :west => :smallcave, :south => :torture_chamber, :north => :catacomb })
-my_dungeon.add_room(:smallcave, "Small Cave", "a small, claustrophobic cave", { :east => :largecave, :south => :torture_chamber, :north => :catacomb })
-my_dungeon.add_room(:torture_chamber, "Torture Chamber", "a horrific room filled with torture devices", { :west => :smallcave, :east => :largecave, :north => :catacomb })
-my_dungeon.add_room(:catacomb, "Catacombs", "a dark and creepy maze of catacombs", { :west => :smallcave, :east => :largecave, :south => :torture_chamber })
+my_dungeon.add_room(:largecave, "Large Cave", "a large cavernous cave", { :west => :smallcave, :south => :torture_chamber, :north => :catacomb, :east => :largecave })
+my_dungeon.add_room(:smallcave, "Small Cave", "a small, claustrophobic cave", { :east => :largecave, :south => :torture_chamber, :north => :catacomb, :west => :smallcave })
+my_dungeon.add_room(:torture_chamber, "Torture Chamber", "a horrific room filled with torture devices", { :west => :smallcave, :east => :largecave, :north => :catacomb, :south => :torture_chamber  })
+my_dungeon.add_room(:catacomb, "Catacombs", "a dark and creepy maze of catacombs", { :west => :smallcave, :east => :largecave, :south => :torture_chamber, :north => :catacomb })
 
-# Start the dungeon by placing the player in the large cave
+# User picks direction to travel
 my_dungeon.start(:largecave)
+loop do
+  puts "Which direction now? Enter 'north', 'south', 'east', or 'west'.  Type 'exit' to quit."
+  player_input = gets.chomp.downcase.to_sym
+  if player_input == :exit
+    break
+  elsif player_input == :north || player_input == :south || player_input == :east || player_input == :west
+    my_dungeon.go(player_input)
+  else
+    puts "Sorry, I didn't get that.  Please try again."
+  end
+end
 
-my_dungeon.go(:north)
-
-my_dungeon.go(:east)
-
-my_dungeon.go(:west)
-
-my_dungeon.go(:south)
