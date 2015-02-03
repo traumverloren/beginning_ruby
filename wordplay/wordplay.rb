@@ -1,3 +1,13 @@
+class String
+  def sentences
+    self.gsub(/\n|\r/, ' ').split(/\.\s*/)
+  end
+
+  def words
+    self.scan(/\w[\w\'\-]*/)
+  end
+end
+
 class WordPlay
 
   def self.switch_pronouns(text)
@@ -12,7 +22,7 @@ class WordPlay
       when "i am"
         "you are"
       when "you are"
-        "I am"
+        "i am"
       when "your"
         "my"
       when "my"
@@ -28,20 +38,4 @@ class WordPlay
 
     ranked_sentences.last
   end
-
-
 end
-
-
-class String
-
-  def sentences
-    gsub(/\n|\r/, ' ').split(/\.\s*/)
-  end
-
-  def words
-    scan(/\w[\w\'\-]*/)
-  end
-
-end
-
